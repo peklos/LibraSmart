@@ -6,15 +6,22 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:build:windows": "tauri build --target x86_64-pc-windows-msvc",
+    "tauri:build:linux": "tauri build --target x86_64-unknown-linux-gnu"
   },
   "dependencies": {
-    "vue": "^3.3.11",
-    "vue-router": "^4.2.5",
+    "@tauri-apps/api": "^1.6.0",
     "axios": "^1.6.2",
-    "pinia": "^2.1.7"
+    "pinia": "^2.1.7",
+    "vue": "^3.3.11",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1.6.3",
     "@vitejs/plugin-vue": "^4.5.2",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
