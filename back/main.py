@@ -94,6 +94,7 @@ def root():
 
 # Healthcheck endpoint
 @app.get("/health")
+@app.head("/health")
 def health_check():
     """Проверка работоспособности API"""
     return {"status": "healthy", "service": "LibraSmart API"}
