@@ -13,6 +13,7 @@ const router = createRouter({
     {
       path: '/reader',
       meta: { requiresAuth: true, userType: 'reader' },
+      redirect: '/reader/catalog',
       children: [
         {
           path: 'catalog',
@@ -45,6 +46,7 @@ const router = createRouter({
     {
       path: '/staff',
       meta: { requiresAuth: true, userType: 'staff' },
+      redirect: '/staff/dashboard',
       children: [
         {
           path: 'dashboard',
@@ -93,12 +95,28 @@ const router = createRouter({
           component: () => import('../views/staff/Genres.vue')
         }
       ]
+    },
+    // Catch-all route for non-existent pages - redirect to home
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/'
     }
   ]
 })
 
 router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore()
+
+  // Auto-redirect authenticated users from home page to their default page
+  if (to.path === '/' && authStore.isAuthenticated) {
+    if (authStore.userType === 'reader') {
+      next('/reader/catalog')
+      return
+    } else if (authStore.userType === 'staff') {
+      next('/staff/dashboard')
+      return
+    }
+  }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next('/')
