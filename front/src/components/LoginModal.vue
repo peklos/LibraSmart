@@ -4,7 +4,7 @@
       <div class="text-center mb-6">
         <div class="text-4xl mb-3">📚</div>
         <h2 class="text-2xl font-bold text-primary-600">LibraSmart</h2>
-        <p class="text-dark-700 mt-2">Вход в систему</p>
+        <p class="text-black mt-2">Вход в систему</p>
       </div>
 
       <!-- Tabs -->
@@ -28,7 +28,7 @@
       <!-- Reader Login -->
       <form v-if="activeTab === 'reader'" @submit.prevent="handleReaderLogin" class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-dark-800 mb-1">Email</label>
+          <label class="block text-sm font-medium text-black mb-1">Email</label>
           <input
             v-model="readerEmail"
             type="email"
@@ -38,7 +38,7 @@
           />
         </div>
         <div>
-          <label class="block text-sm font-medium text-dark-800 mb-1">Пароль</label>
+          <label class="block text-sm font-medium text-black mb-1">Пароль</label>
           <input
             v-model="readerPassword"
             type="password"
@@ -61,7 +61,7 @@
       <!-- Staff Login -->
       <form v-if="activeTab === 'staff'" @submit.prevent="handleStaffLogin" class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-dark-800 mb-1">Email</label>
+          <label class="block text-sm font-medium text-black mb-1">Email</label>
           <input
             v-model="staffEmail"
             type="email"
@@ -71,7 +71,7 @@
           />
         </div>
         <div>
-          <label class="block text-sm font-medium text-dark-800 mb-1">Пароль</label>
+          <label class="block text-sm font-medium text-black mb-1">Пароль</label>
           <input
             v-model="staffPassword"
             type="password"
