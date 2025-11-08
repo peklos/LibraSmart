@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from db.database import get_db
-from db.models import Loan, Genre, Book
+from db.models import Loan, Genre, Book, BookCopy
 from schemas.loan import LoanWithDetails
 from typing import List
 
@@ -53,10 +53,11 @@ def get_reading_stats(reader_id: int, db: Session = Depends(get_db)):
     favorite_genres = db.query(
         Genre.genre_name,
         func.count(Loan.id).label("count")
-    ).join(Book, Book.id == Loan.copy.property.mapper.class_.book_id)\
+    ).join(BookCopy, BookCopy.id == Loan.copy_id)\
+     .join(Book, Book.id == BookCopy.book_id)\
      .join(Genre, Genre.id == Book.genre_id)\
      .filter(Loan.reader_id == reader_id)\
-     .group_by(Genre.id)\
+     .group_by(Genre.id, Genre.genre_name)\
      .order_by(func.count(Loan.id).desc())\
      .limit(3)\
      .all()
