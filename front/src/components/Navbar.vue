@@ -38,6 +38,20 @@
             >
               История
             </router-link>
+            <router-link
+              to="/reader/libraries"
+              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-dark-200 transition"
+              :class="isActive('/reader/libraries') ? 'bg-dark-200 text-primary-600' : 'text-dark-800'"
+            >
+              Библиотеки
+            </router-link>
+            <router-link
+              to="/reader/profile"
+              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-dark-200 transition"
+              :class="isActive('/reader/profile') ? 'bg-dark-200 text-primary-600' : 'text-dark-800'"
+            >
+              Профиль
+            </router-link>
           </div>
 
           <!-- Staff Menu -->
@@ -70,6 +84,13 @@
             >
               Выдачи
             </router-link>
+            <router-link
+              to="/staff/libraries"
+              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-dark-200 transition"
+              :class="isActive('/staff/libraries') ? 'bg-dark-200 text-primary-600' : 'text-dark-800'"
+            >
+              Библиотеки
+            </router-link>
           </div>
         </div>
 
@@ -91,15 +112,30 @@
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import type { Staff } from '../types'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 
 const user = computed(() => authStore.user)
-const userTypeLabel = computed(() =>
-  authStore.userType === 'reader' ? 'Читатель' : 'Сотрудник'
-)
+
+const roleNames: Record<number, string> = {
+  1: 'Администратор',
+  2: 'Старший библиотекарь',
+  3: 'Библиотекарь',
+  4: 'Помощник библиотекаря'
+}
+
+const userTypeLabel = computed(() => {
+  if (authStore.userType === 'reader') {
+    return 'Читатель'
+  } else if (authStore.userType === 'staff') {
+    const staff = authStore.user as Staff
+    return roleNames[staff.role_id] || 'Сотрудник'
+  }
+  return ''
+})
 
 const isActive = (path: string) => route.path.startsWith(path)
 

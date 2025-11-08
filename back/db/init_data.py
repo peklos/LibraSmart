@@ -218,8 +218,17 @@ def init_test_data(db: Session):
         {"reader_id": 7, "copy_id": 75, "staff_id": 3, "loan_date": date.today() - timedelta(days=25), "due_date": date.today() - timedelta(days=11), "return_date": None, "status": "overdue"},
         {"reader_id": 8, "copy_id": 90, "staff_id": 4, "loan_date": date.today() - timedelta(days=18), "due_date": date.today() - timedelta(days=4), "return_date": None, "status": "overdue"},
 
-        # Возвращенные займы
+        # Возвращенные займы для пользователя alekseev (reader_id: 1)
         {"reader_id": 1, "copy_id": 5, "staff_id": 2, "loan_date": date.today() - timedelta(days=30), "due_date": date.today() - timedelta(days=16), "return_date": date.today() - timedelta(days=18), "status": "returned"},
+        {"reader_id": 1, "copy_id": 9, "staff_id": 2, "loan_date": date.today() - timedelta(days=45), "due_date": date.today() - timedelta(days=31), "return_date": date.today() - timedelta(days=32), "status": "returned"},
+        {"reader_id": 1, "copy_id": 13, "staff_id": 2, "loan_date": date.today() - timedelta(days=60), "due_date": date.today() - timedelta(days=46), "return_date": date.today() - timedelta(days=47), "status": "returned"},
+        {"reader_id": 1, "copy_id": 17, "staff_id": 3, "loan_date": date.today() - timedelta(days=75), "due_date": date.today() - timedelta(days=61), "return_date": date.today() - timedelta(days=60), "status": "returned"},
+        {"reader_id": 1, "copy_id": 21, "staff_id": 2, "loan_date": date.today() - timedelta(days=90), "due_date": date.today() - timedelta(days=76), "return_date": date.today() - timedelta(days=75), "status": "returned"},
+        {"reader_id": 1, "copy_id": 29, "staff_id": 2, "loan_date": date.today() - timedelta(days=105), "due_date": date.today() - timedelta(days=91), "return_date": date.today() - timedelta(days=90), "status": "returned"},
+        {"reader_id": 1, "copy_id": 33, "staff_id": 3, "loan_date": date.today() - timedelta(days=120), "due_date": date.today() - timedelta(days=106), "return_date": date.today() - timedelta(days=105), "status": "returned"},
+        {"reader_id": 1, "copy_id": 41, "staff_id": 2, "loan_date": date.today() - timedelta(days=135), "due_date": date.today() - timedelta(days=121), "return_date": date.today() - timedelta(days=120), "status": "returned"},
+
+        # Возвращенные займы для других пользователей
         {"reader_id": 2, "copy_id": 15, "staff_id": 2, "loan_date": date.today() - timedelta(days=35), "due_date": date.today() - timedelta(days=21), "return_date": date.today() - timedelta(days=22), "status": "returned"},
         {"reader_id": 3, "copy_id": 20, "staff_id": 3, "loan_date": date.today() - timedelta(days=40), "due_date": date.today() - timedelta(days=26), "return_date": date.today() - timedelta(days=25), "status": "returned"},
         {"reader_id": 9, "copy_id": 100, "staff_id": 5, "loan_date": date.today() - timedelta(days=50), "due_date": date.today() - timedelta(days=36), "return_date": date.today() - timedelta(days=35), "status": "returned"},
