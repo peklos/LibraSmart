@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { getAllReservations, getActiveReservations, updateReservation, deleteReservation as apiDeleteReservation } from '../../api'
+import { getAllReservations, updateReservation, deleteReservation as apiDeleteReservation } from '../../api'
 import type { Reservation } from '../../types'
 
 const loading = ref(false)
