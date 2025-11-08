@@ -136,10 +136,15 @@ const openEditModal = (book: Book) => {
 const handleSubmit = async () => {
   modalError.value = ''
   try {
+    const formData = {
+      ...form.value,
+      genre_id: form.value.genre_id ?? undefined,
+      publication_year: form.value.publication_year ?? undefined
+    }
     if (editingBook.value) {
-      await updateBook(editingBook.value.id, form.value)
+      await updateBook(editingBook.value.id, formData)
     } else {
-      await createBook(form.value)
+      await createBook(formData)
     }
     showModal.value = false
     fetchBooks()

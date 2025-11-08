@@ -128,10 +128,15 @@ const openEditModal = (copy: BookCopy) => {
 
 const handleSubmit = async () => {
   try {
+    const formData = {
+      ...form.value,
+      book_id: form.value.book_id ?? undefined,
+      library_id: form.value.library_id ?? undefined
+    }
     if (editingCopy.value) {
-      await updateCopy(editingCopy.value.id, form.value)
+      await updateCopy(editingCopy.value.id, formData)
     } else {
-      await createCopy(form.value)
+      await createCopy(formData)
     }
     showModal.value = false
     fetchCopies()

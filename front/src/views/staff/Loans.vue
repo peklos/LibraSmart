@@ -88,7 +88,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '../../stores/auth'
-import { getAllLoans, getActiveLoans, getOverdueLoans, createLoan, returnLoan as apiReturnLoan, getAllReaders, getAllCopies } from '../../api'
+import { getAllLoans, createLoan, returnLoan as apiReturnLoan, getAllReaders, getAllCopies } from '../../api'
 import type { Loan, Reader, BookCopy, Staff } from '../../types'
 
 const authStore = useAuthStore()
