@@ -1,19 +1,7 @@
 <template>
   <div class="min-h-screen flex items-center justify-center px-4">
     <div class="max-w-4xl w-full text-center">
-      <div class="text-6xl mb-6">📚</div>
-      <h1 class="text-5xl font-bold text-primary-600 mb-4">LibraSmart</h1>
-      <p class="text-xl text-dark-700 mb-8">
-        Современная система управления библиотекой
-      </p>
-
-      <div v-if="!authStore.isAuthenticated" class="space-y-4">
-        <button @click="showLoginModal = true" class="btn btn-primary inline-block text-lg px-8 py-3">
-          Войти в систему
-        </button>
-      </div>
-
-      <div v-else class="grid md:grid-cols-2 gap-6">
+      <div v-if="authStore.isAuthenticated" class="grid md:grid-cols-2 gap-6">
         <router-link
           v-if="authStore.userType === 'reader'"
           to="/reader/catalog"
@@ -54,10 +42,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import LoginModal from '../components/LoginModal.vue'
 
 const authStore = useAuthStore()
 const showLoginModal = ref(false)
+
+onMounted(() => {
+  if (!authStore.isAuthenticated) {
+    showLoginModal.value = true
+  }
+})
 </script>
