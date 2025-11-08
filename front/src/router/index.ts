@@ -9,11 +9,6 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/Home.vue')
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/Login.vue')
-    },
     // READER ROUTES
     {
       path: '/reader',
@@ -106,7 +101,7 @@ router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore()
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next('/login')
+    next('/')
   } else if (to.meta.userType && to.meta.userType !== authStore.userType) {
     next('/')
   } else if (to.meta.requiresAdmin && !authStore.isAdmin()) {
