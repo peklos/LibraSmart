@@ -45,6 +45,13 @@
             >
               Библиотеки
             </router-link>
+            <router-link
+              to="/reader/profile"
+              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-dark-200 transition"
+              :class="isActive('/reader/profile') ? 'bg-dark-200 text-primary-600' : 'text-dark-800'"
+            >
+              Профиль
+            </router-link>
           </div>
 
           <!-- Staff Menu -->
