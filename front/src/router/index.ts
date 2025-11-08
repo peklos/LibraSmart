@@ -39,6 +39,11 @@ const router = createRouter({
           path: 'profile',
           name: 'reader-profile',
           component: () => import('../views/reader/Profile.vue')
+        },
+        {
+          path: 'libraries',
+          name: 'reader-libraries',
+          component: () => import('../views/reader/Libraries.vue')
         }
       ]
     },
