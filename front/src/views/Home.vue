@@ -8,9 +8,9 @@
       </p>
 
       <div v-if="!authStore.isAuthenticated" class="space-y-4">
-        <router-link to="/login" class="btn btn-primary inline-block text-lg px-8 py-3">
+        <button @click="showLoginModal = true" class="btn btn-primary inline-block text-lg px-8 py-3">
           Войти в систему
-        </router-link>
+        </button>
       </div>
 
       <div v-else class="grid md:grid-cols-2 gap-6">
@@ -48,11 +48,16 @@
         </router-link>
       </div>
     </div>
+
+    <LoginModal :isOpen="showLoginModal" @close="showLoginModal = false" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useAuthStore } from '../stores/auth'
+import LoginModal from '../components/LoginModal.vue'
 
 const authStore = useAuthStore()
+const showLoginModal = ref(false)
 </script>
