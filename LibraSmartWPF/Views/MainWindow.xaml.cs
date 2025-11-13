@@ -42,6 +42,14 @@ public partial class MainWindow : Window
         {
             page = new MyReservationsPage();
         }
+        else if (MenuListBox.SelectedItem == HistoryMenuItem)
+        {
+            page = new HistoryPage();
+        }
+        else if (MenuListBox.SelectedItem == ProfileMenuItem)
+        {
+            page = new ProfilePage();
+        }
         // Страницы для персонала
         else if (MenuListBox.SelectedItem == BooksManagementMenuItem)
         {

@@ -75,6 +75,20 @@
                             <TextBlock Text="Мои бронирования" VerticalAlignment="Center"/>
                         </StackPanel>
                     </ListBoxItem>
+                    <ListBoxItem x:Name="HistoryMenuItem"
+                                Visibility="{Binding IsReader, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="History" Width="24" Height="24" Margin="0,0,12,0"/>
+                            <TextBlock Text="История" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem x:Name="ProfileMenuItem"
+                                Visibility="{Binding IsReader, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Account" Width="24" Height="24" Margin="0,0,12,0"/>
+                            <TextBlock Text="Мой профиль" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
 
                     <!-- Меню для персонала -->
                     <ListBoxItem x:Name="BooksManagementMenuItem"

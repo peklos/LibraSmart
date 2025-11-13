@@ -1,5 +1,4 @@
 using LibraSmartWPF.Models;
-using BCrypt.Net;
 
 namespace LibraSmartWPF.Data;
 
@@ -36,16 +35,16 @@ public static class DatabaseInitializer
         context.Libraries.AddRange(libraries);
         context.SaveChanges();
 
-        // 3. Библиотекари (пароли хешируются с помощью BCrypt)
+        // 3. Библиотекари
         var staffMembers = new[]
         {
-            new Staff { Id = 1, FullName = "Петрова Анна Сергеевна", Position = "Директор", LibraryId = 1, Email = "petrova@library.ru", Password = BCrypt.Net.BCrypt.HashPassword("admin123"), RoleId = 1 },
-            new Staff { Id = 2, FullName = "Иванов Дмитрий Петрович", Position = "Старший библиотекарь", LibraryId = 1, Email = "ivanov@library.ru", Password = BCrypt.Net.BCrypt.HashPassword("staff123"), RoleId = 2 },
-            new Staff { Id = 3, FullName = "Смирнова Елена Викторовна", Position = "Библиотекарь", LibraryId = 2, Email = "smirnova@library.ru", Password = BCrypt.Net.BCrypt.HashPassword("staff123"), RoleId = 3 },
-            new Staff { Id = 4, FullName = "Козлов Андрей Николаевич", Position = "Библиотекарь", LibraryId = 3, Email = "kozlov@library.ru", Password = BCrypt.Net.BCrypt.HashPassword("staff123"), RoleId = 3 },
-            new Staff { Id = 5, FullName = "Морозова Ольга Ивановна", Position = "Старший библиотекарь", LibraryId = 4, Email = "morozova@library.ru", Password = BCrypt.Net.BCrypt.HashPassword("staff123"), RoleId = 2 },
-            new Staff { Id = 6, FullName = "Новиков Сергей Александрович", Position = "Библиотекарь", LibraryId = 5, Email = "novikov@library.ru", Password = BCrypt.Net.BCrypt.HashPassword("staff123"), RoleId = 3 },
-            new Staff { Id = 7, FullName = "Соколова Мария Дмитриевна", Position = "Помощник библиотекаря", LibraryId = 1, Email = "sokolova@library.ru", Password = BCrypt.Net.BCrypt.HashPassword("staff123"), RoleId = 4 }
+            new Staff { Id = 1, FullName = "Петрова Анна Сергеевна", Position = "Директор", LibraryId = 1, Email = "petrova@library.ru", Password = "admin123", RoleId = 1 },
+            new Staff { Id = 2, FullName = "Иванов Дмитрий Петрович", Position = "Старший библиотекарь", LibraryId = 1, Email = "ivanov@library.ru", Password = "staff123", RoleId = 2 },
+            new Staff { Id = 3, FullName = "Смирнова Елена Викторовна", Position = "Библиотекарь", LibraryId = 2, Email = "smirnova@library.ru", Password = "staff123", RoleId = 3 },
+            new Staff { Id = 4, FullName = "Козлов Андрей Николаевич", Position = "Библиотекарь", LibraryId = 3, Email = "kozlov@library.ru", Password = "staff123", RoleId = 3 },
+            new Staff { Id = 5, FullName = "Морозова Ольга Ивановна", Position = "Старший библиотекарь", LibraryId = 4, Email = "morozova@library.ru", Password = "staff123", RoleId = 2 },
+            new Staff { Id = 6, FullName = "Новиков Сергей Александрович", Position = "Библиотекарь", LibraryId = 5, Email = "novikov@library.ru", Password = "staff123", RoleId = 3 },
+            new Staff { Id = 7, FullName = "Соколова Мария Дмитриевна", Position = "Помощник библиотекаря", LibraryId = 1, Email = "sokolova@library.ru", Password = "staff123", RoleId = 4 }
         };
         context.Staff.AddRange(staffMembers);
         context.SaveChanges();
@@ -53,16 +52,16 @@ public static class DatabaseInitializer
         // 4. Читатели
         var readers = new[]
         {
-            new Reader { Id = 1, FullName = "Алексеев Владимир Игоревич", Email = "alekseev@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 111-22-33", LibraryCardNumber = "LIB-2024-001" },
-            new Reader { Id = 2, FullName = "Волкова Екатерина Павловна", Email = "volkova@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 222-33-44", LibraryCardNumber = "LIB-2024-002" },
-            new Reader { Id = 3, FullName = "Федоров Николай Андреевич", Email = "fedorov@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 333-44-55", LibraryCardNumber = "LIB-2024-003" },
-            new Reader { Id = 4, FullName = "Лебедева Анастасия Сергеевна", Email = "lebedeva@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 444-55-66", LibraryCardNumber = "LIB-2024-004" },
-            new Reader { Id = 5, FullName = "Кузнецов Михаил Дмитриевич", Email = "kuznetsov@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 555-66-77", LibraryCardNumber = "LIB-2024-005" },
-            new Reader { Id = 6, FullName = "Павлова Ирина Александровна", Email = "pavlova@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 666-77-88", LibraryCardNumber = "LIB-2024-006" },
-            new Reader { Id = 7, FullName = "Соловьев Артем Викторович", Email = "solovyev@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 777-88-99", LibraryCardNumber = "LIB-2024-007" },
-            new Reader { Id = 8, FullName = "Егорова Светлана Петровна", Email = "egorova@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 888-99-00", LibraryCardNumber = "LIB-2024-008" },
-            new Reader { Id = 9, FullName = "Макаров Денис Иванович", Email = "makarov@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 999-00-11", LibraryCardNumber = "LIB-2024-009" },
-            new Reader { Id = 10, FullName = "Титова Юлия Николаевна", Email = "titova@mail.ru", Password = BCrypt.Net.BCrypt.HashPassword("reader123"), Phone = "+7 (910) 000-11-22", LibraryCardNumber = "LIB-2024-010" }
+            new Reader { Id = 1, FullName = "Алексеев Владимир Игоревич", Email = "alekseev@mail.ru", Password = "reader123", Phone = "+7 (910) 111-22-33", LibraryCardNumber = "LIB-2024-001" },
+            new Reader { Id = 2, FullName = "Волкова Екатерина Павловна", Email = "volkova@mail.ru", Password = "reader123", Phone = "+7 (910) 222-33-44", LibraryCardNumber = "LIB-2024-002" },
+            new Reader { Id = 3, FullName = "Федоров Николай Андреевич", Email = "fedorov@mail.ru", Password = "reader123", Phone = "+7 (910) 333-44-55", LibraryCardNumber = "LIB-2024-003" },
+            new Reader { Id = 4, FullName = "Лебедева Анастасия Сергеевна", Email = "lebedeva@mail.ru", Password = "reader123", Phone = "+7 (910) 444-55-66", LibraryCardNumber = "LIB-2024-004" },
+            new Reader { Id = 5, FullName = "Кузнецов Михаил Дмитриевич", Email = "kuznetsov@mail.ru", Password = "reader123", Phone = "+7 (910) 555-66-77", LibraryCardNumber = "LIB-2024-005" },
+            new Reader { Id = 6, FullName = "Павлова Ирина Александровна", Email = "pavlova@mail.ru", Password = "reader123", Phone = "+7 (910) 666-77-88", LibraryCardNumber = "LIB-2024-006" },
+            new Reader { Id = 7, FullName = "Соловьев Артем Викторович", Email = "solovyev@mail.ru", Password = "reader123", Phone = "+7 (910) 777-88-99", LibraryCardNumber = "LIB-2024-007" },
+            new Reader { Id = 8, FullName = "Егорова Светлана Петровна", Email = "egorova@mail.ru", Password = "reader123", Phone = "+7 (910) 888-99-00", LibraryCardNumber = "LIB-2024-008" },
+            new Reader { Id = 9, FullName = "Макаров Денис Иванович", Email = "makarov@mail.ru", Password = "reader123", Phone = "+7 (910) 999-00-11", LibraryCardNumber = "LIB-2024-009" },
+            new Reader { Id = 10, FullName = "Титова Юлия Николаевна", Email = "titova@mail.ru", Password = "reader123", Phone = "+7 (910) 000-11-22", LibraryCardNumber = "LIB-2024-010" }
         };
         context.Readers.AddRange(readers);
         context.SaveChanges();

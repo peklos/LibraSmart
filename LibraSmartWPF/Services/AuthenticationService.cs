@@ -1,7 +1,6 @@
 using LibraSmartWPF.Data;
 using LibraSmartWPF.Models;
 using Microsoft.EntityFrameworkCore;
-using BCrypt.Net;
 
 namespace LibraSmartWPF.Services;
 
@@ -30,7 +29,7 @@ public class AuthenticationService
                 return (false, "Пользователь с таким email не найден", null);
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(password, reader.Password))
+            if (reader.Password != password)
             {
                 return (false, "Неверный пароль", null);
             }
@@ -63,7 +62,7 @@ public class AuthenticationService
                 return (false, "Пользователь с таким email не найден", null);
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(password, staff.Password))
+            if (staff.Password != password)
             {
                 return (false, "Неверный пароль", null);
             }
@@ -115,7 +114,7 @@ public class AuthenticationService
             {
                 FullName = fullName,
                 Email = email,
-                Password = BCrypt.Net.BCrypt.HashPassword(password),
+                Password = password,
                 Phone = phone,
                 LibraryCardNumber = cardNumber,
                 CreatedAt = DateTime.UtcNow
