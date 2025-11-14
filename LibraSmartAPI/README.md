@@ -24,14 +24,21 @@
 
 ## 🛠️ Сборка приложения
 
-### Windows (PowerShell)
+### Windows (Рекомендуется)
 
-```powershell
+**Вариант 1: BAT файл (самый надежный)**
+```cmd
 cd LibraSmartAPI
-.\build.ps1
+build.bat
 ```
 
-### Linux/WSL (Bash)
+**Вариант 2: PowerShell**
+```powershell
+cd LibraSmartAPI
+.\build-simple.ps1
+```
+
+### Linux/WSL
 
 ```bash
 cd LibraSmartAPI
