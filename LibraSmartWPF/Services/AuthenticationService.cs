@@ -87,6 +87,22 @@ public class AuthenticationService
     }
 
     /// <summary>
+    /// Обновление данных текущего читателя
+    /// </summary>
+    public static void UpdateCurrentReader(Reader reader)
+    {
+        _currentReader = reader;
+    }
+
+    /// <summary>
+    /// Обновление данных текущего сотрудника
+    /// </summary>
+    public static void UpdateCurrentStaff(Staff staff)
+    {
+        _currentStaff = staff;
+    }
+
+    /// <summary>
     /// Регистрация нового читателя
     /// </summary>
     public static (bool success, string? message) RegisterReader(string fullName, string email, string password, string phone)
