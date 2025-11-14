@@ -1,14 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
 using LibraSmartAPI.Data;
-using LibraSmartAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Настройка порта по умолчанию
+// Настройка порта
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(5000); // HTTP
@@ -19,6 +14,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Keep original casing
     });
 
 // Настройка CORS
@@ -49,65 +45,15 @@ if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
 builder.Services.AddDbContext<LibraryContext>(options =>
     options.UseSqlite($"Data Source={dbPath}"));
 
-// Настройка JWT Authentication
-var jwtSecret = builder.Configuration["JWT:Secret"] ?? "LibraSmart_Super_Secret_Key_2024_Min32Characters!";
-var key = Encoding.ASCII.GetBytes(jwtSecret);
-
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
-});
-
-// Регистрируем сервисы
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
         Title = "LibraSmart API",
         Version = "v1",
-        Description = "API для библиотечной системы управления"
-    });
-
-    // Настройка JWT в Swagger
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
+        Description = "Full-stack library management system API"
     });
 });
 
@@ -122,12 +68,12 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<LibraryContext>();
         context.Database.EnsureCreated();
         DatabaseInitializer.Initialize(context);
-        Console.WriteLine("✓ База данных инициализирована успешно");
-        Console.WriteLine($"✓ Путь к БД: {dbPath}");
+        Console.WriteLine("Database initialized successfully");
+        Console.WriteLine($"Database path: {dbPath}");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"✗ Ошибка инициализации БД: {ex.Message}");
+        Console.WriteLine($"Database initialization error: {ex.Message}");
     }
 }
 
@@ -144,26 +90,27 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 
-// Раздача статических файлов (Vue.js фронтенд)
+// Serve static files (Vue.js frontend)
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.MapControllers();
 
-// Fallback для Vue Router (SPA)
+// Fallback for Vue Router (SPA)
 app.MapFallbackToFile("index.html");
 
-Console.WriteLine("╔════════════════════════════════════════════════════════╗");
-Console.WriteLine("║         LibraSmart - Библиотечная система             ║");
-Console.WriteLine("╚════════════════════════════════════════════════════════╝");
+Console.WriteLine("============================================================");
+Console.WriteLine("         LibraSmart - Library Management System            ");
+Console.WriteLine("============================================================");
 Console.WriteLine();
-Console.WriteLine($"✓ Приложение запущено: http://localhost:5000");
-Console.WriteLine($"✓ API Swagger: http://localhost:5000/api/docs");
-Console.WriteLine($"✓ База данных: {dbPath}");
+Console.WriteLine($"Application running: http://localhost:5000");
+Console.WriteLine($"API docs: http://localhost:5000/api/docs");
+Console.WriteLine($"Database: {dbPath}");
 Console.WriteLine();
-Console.WriteLine("Нажмите Ctrl+C для остановки...");
+Console.WriteLine("Test credentials:");
+Console.WriteLine("  Reader: alekseev@mail.ru / reader123");
+Console.WriteLine("  Staff: petrova@library.ru / admin123");
+Console.WriteLine();
+Console.WriteLine("Press Ctrl+C to stop...");
 
 app.Run();
