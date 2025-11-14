@@ -4,7 +4,6 @@ using LibraSmartAPI.Services;
 namespace LibraSmartAPI.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthenticationService _authService;
@@ -14,55 +13,65 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost("login/reader")]
+    // Reader login (Vue frontend expects /api/auth/login)
+    [HttpPost("api/auth/login")]
     public IActionResult LoginReader([FromBody] LoginRequest request)
     {
         var (success, token, reader) = _authService.AuthenticateReader(request.Email, request.Password);
 
         if (!success || reader == null)
         {
-            return Unauthorized(new { message = "Неверный email или пароль" });
+            return Unauthorized(new { message = "Invalid credentials" });
         }
 
         return Ok(new
         {
-            token,
-            user = new
-            {
-                id = reader.Id,
-                fullName = reader.FullName,
-                email = reader.Email,
-                phone = reader.Phone,
-                libraryCardNumber = reader.LibraryCardNumber,
-                type = "reader"
-            }
+            id = reader.Id,
+            full_name = reader.FullName,
+            email = reader.Email,
+            phone = reader.Phone,
+            library_card_number = reader.LibraryCardNumber,
+            token
         });
     }
 
-    [HttpPost("login/staff")]
+    // Staff login (Vue frontend expects /api/admin/auth/login)
+    [HttpPost("api/admin/auth/login")]
     public IActionResult LoginStaff([FromBody] LoginRequest request)
     {
         var (success, token, staff) = _authService.AuthenticateStaff(request.Email, request.Password);
 
         if (!success || staff == null)
         {
-            return Unauthorized(new { message = "Неверный email или пароль" });
+            return Unauthorized(new { message = "Invalid credentials" });
         }
 
         return Ok(new
         {
-            token,
-            user = new
-            {
-                id = staff.Id,
-                fullName = staff.FullName,
-                email = staff.Email,
-                position = staff.Position,
-                libraryId = staff.LibraryId,
-                roleId = staff.RoleId,
-                type = "staff"
-            }
+            id = staff.Id,
+            full_name = staff.FullName,
+            email = staff.Email,
+            position = staff.Position,
+            library_id = staff.LibraryId,
+            role_id = staff.RoleId,
+            token
         });
+    }
+
+    // Reader profile
+    [HttpGet("api/auth/me/{id}")]
+    public IActionResult GetReaderProfile(int id)
+    {
+        // TODO: implement
+        return Ok(new { id, message = "Not implemented yet" });
+    }
+
+    // Staff profile
+    [HttpGet("api/admin/auth/me/{id}")]
+    public IActionResult GetStaffProfile(int id)
+    {
+        // TODO: implement
+        return Ok(new { id, message = "Not implemented yet" });
     }
 }
 
