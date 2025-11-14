@@ -1,0 +1,130 @@
+<Page x:Class="LibraSmartWPF.Views.Reader.MyLoansPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:viewmodels="clr-namespace:LibraSmartWPF.ViewModels"
+      Title="MyLoansPage">
+
+    <Page.DataContext>
+        <viewmodels:MyLoansViewModel />
+    </Page.DataContext>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Text="Мои займы"
+                  Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                  Margin="0,0,0,24"/>
+
+        <!-- Фильтры и кнопки -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Фильтр:"
+                      VerticalAlignment="Center"
+                      Margin="0,0,12,0"
+                      FontWeight="Medium"/>
+
+            <RadioButton Grid.Column="1"
+                        Content="Все"
+                        GroupName="StatusFilter"
+                        IsChecked="True"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        Margin="0,0,8,0"
+                        Command="{Binding RefreshCommand}">
+                <RadioButton.CommandParameter>
+                    <Binding Path="FilterStatus" Mode="TwoWay">
+                        <Binding.Source>
+                            <system:String xmlns:system="clr-namespace:System;assembly=mscorlib">all</system:String>
+                        </Binding.Source>
+                    </Binding>
+                </RadioButton.CommandParameter>
+            </RadioButton>
+
+            <RadioButton Grid.Column="2"
+                        Content="Активные"
+                        GroupName="StatusFilter"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        Margin="0,0,8,0"
+                        Checked="ActiveFilter_Checked"/>
+
+            <RadioButton Grid.Column="3"
+                        Content="Возвращённые"
+                        GroupName="StatusFilter"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        Margin="0,0,8,0"
+                        Checked="ReturnedFilter_Checked"/>
+
+            <Button Grid.Column="5"
+                   Command="{Binding RefreshCommand}"
+                   Style="{StaticResource MaterialDesignIconButton}"
+                   ToolTip="Обновить">
+                <materialDesign:PackIcon Kind="Refresh" Width="24" Height="24"/>
+            </Button>
+        </Grid>
+
+        <!-- Список займов -->
+        <materialDesign:Card Grid.Row="2">
+            <Grid>
+                <!-- Индикатор загрузки -->
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                            Value="0"
+                            IsIndeterminate="True"
+                            Width="50"
+                            Height="50"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                <!-- DataGrid с займами -->
+                <DataGrid ItemsSource="{Binding Loans}"
+                         SelectedItem="{Binding SelectedLoan}"
+                         AutoGenerateColumns="False"
+                         CanUserAddRows="False"
+                         CanUserDeleteRows="False"
+                         IsReadOnly="True"
+                         SelectionMode="Single"
+                         materialDesign:DataGridAssist.CellPadding="8"
+                         materialDesign:DataGridAssist.ColumnHeaderPadding="8">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Книга"
+                                          Binding="{Binding BookTitle}"
+                                          Width="*"
+                                          MinWidth="200"/>
+                        <DataGridTextColumn Header="Автор"
+                                          Binding="{Binding BookAuthor}"
+                                          Width="*"
+                                          MinWidth="150"/>
+                        <DataGridTextColumn Header="Библиотека"
+                                          Binding="{Binding LibraryName}"
+                                          Width="200"/>
+                        <DataGridTextColumn Header="Дата выдачи"
+                                          Binding="{Binding LoanDate, StringFormat='dd.MM.yyyy'}"
+                                          Width="120"/>
+                        <DataGridTextColumn Header="Срок возврата"
+                                          Binding="{Binding DueDate, StringFormat='dd.MM.yyyy'}"
+                                          Width="120"/>
+                        <DataGridTextColumn Header="Осталось/Просрочено"
+                                          Binding="{Binding DaysLeftDisplay}"
+                                          Width="180"/>
+                        <DataGridTextColumn Header="Статус"
+                                          Binding="{Binding StatusDisplay}"
+                                          Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</Page>
