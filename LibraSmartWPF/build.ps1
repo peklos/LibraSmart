@@ -1,45 +1,45 @@
-# Скрипт сборки LibraSmart WPF приложения в один .exe файл
-# PowerShell скрипт для Windows
+# LibraSmart WPF Build Script
+# Builds application as a single executable file
 
-Write-Host "╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║        LibraSmart WPF - Сборка приложения                 ║" -ForegroundColor Cyan
-Write-Host "╚════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+Write-Host "================================================================" -ForegroundColor Cyan
+Write-Host "        LibraSmart WPF - Build Script                          " -ForegroundColor Cyan
+Write-Host "================================================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Проверка наличия .NET 8 SDK
-Write-Host "Проверка .NET SDK..." -ForegroundColor Yellow
+# Check .NET SDK
+Write-Host "Checking .NET SDK..." -ForegroundColor Yellow
 $dotnetVersion = dotnet --version 2>$null
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "✗ .NET SDK не найден!" -ForegroundColor Red
-    Write-Host "Пожалуйста, установите .NET 8 SDK: https://dotnet.microsoft.com/download/dotnet/8.0" -ForegroundColor Red
+    Write-Host "[ERROR] .NET SDK not found!" -ForegroundColor Red
+    Write-Host "Please install .NET 8 SDK: https://dotnet.microsoft.com/download/dotnet/8.0" -ForegroundColor Red
     exit 1
 }
-Write-Host "✓ .NET SDK версия: $dotnetVersion" -ForegroundColor Green
+Write-Host "[OK] .NET SDK version: $dotnetVersion" -ForegroundColor Green
 Write-Host ""
 
-# Очистка предыдущих сборок
-Write-Host "Очистка предыдущих сборок..." -ForegroundColor Yellow
+# Clean previous builds
+Write-Host "Cleaning previous builds..." -ForegroundColor Yellow
 dotnet clean -c Release
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "✗ Ошибка при очистке проекта" -ForegroundColor Red
+    Write-Host "[ERROR] Failed to clean project" -ForegroundColor Red
     exit 1
 }
-Write-Host "✓ Очистка завершена" -ForegroundColor Green
+Write-Host "[OK] Clean completed" -ForegroundColor Green
 Write-Host ""
 
-# Восстановление зависимостей
-Write-Host "Восстановление зависимостей..." -ForegroundColor Yellow
+# Restore dependencies
+Write-Host "Restoring dependencies..." -ForegroundColor Yellow
 dotnet restore
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "✗ Ошибка при восстановлении зависимостей" -ForegroundColor Red
+    Write-Host "[ERROR] Failed to restore dependencies" -ForegroundColor Red
     exit 1
 }
-Write-Host "✓ Зависимости восстановлены" -ForegroundColor Green
+Write-Host "[OK] Dependencies restored" -ForegroundColor Green
 Write-Host ""
 
-# Сборка проекта
-Write-Host "Сборка проекта..." -ForegroundColor Yellow
-Write-Host "Это может занять несколько минут..." -ForegroundColor Gray
+# Build project
+Write-Host "Building project..." -ForegroundColor Yellow
+Write-Host "This may take several minutes..." -ForegroundColor Gray
 Write-Host ""
 
 dotnet publish -c Release -r win-x64 `
@@ -52,36 +52,36 @@ dotnet publish -c Release -r win-x64 `
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host ""
-    Write-Host "✗ Ошибка при сборке проекта" -ForegroundColor Red
+    Write-Host "[ERROR] Build failed" -ForegroundColor Red
     exit 1
 }
 
 Write-Host ""
-Write-Host "✓ Сборка успешно завершена!" -ForegroundColor Green
+Write-Host "[OK] Build completed successfully!" -ForegroundColor Green
 Write-Host ""
 
-# Путь к собранному файлу
+# Path to built file
 $publishPath = "bin\Release\net8.0-windows\win-x64\publish"
 $exePath = Join-Path $publishPath "LibraSmart.exe"
 
 if (Test-Path $exePath) {
     $fileSize = (Get-Item $exePath).Length / 1MB
-    Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "Готовый файл:" -ForegroundColor Green
-    Write-Host "  Путь:    $exePath" -ForegroundColor White
-    Write-Host "  Размер:  $([math]::Round($fileSize, 2)) МБ" -ForegroundColor White
-    Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "================================================================" -ForegroundColor Cyan
+    Write-Host "Build Result:" -ForegroundColor Green
+    Write-Host "  Path:    $exePath" -ForegroundColor White
+    Write-Host "  Size:    $([math]::Round($fileSize, 2)) MB" -ForegroundColor White
+    Write-Host "================================================================" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "Приложение готово к использованию!" -ForegroundColor Green
-    Write-Host "Запустите файл LibraSmart.exe для начала работы." -ForegroundColor White
+    Write-Host "Application is ready to use!" -ForegroundColor Green
+    Write-Host "Run LibraSmart.exe to start the application." -ForegroundColor White
     Write-Host ""
 
-    # Предложение открыть папку
-    $response = Read-Host "Открыть папку с файлом? (Y/N)"
+    # Offer to open folder
+    $response = Read-Host "Open output folder? (Y/N)"
     if ($response -eq 'Y' -or $response -eq 'y') {
         explorer.exe $publishPath
     }
 } else {
-    Write-Host "✗ Не удалось найти собранный файл" -ForegroundColor Red
+    Write-Host "[ERROR] Built file not found" -ForegroundColor Red
     exit 1
 }
