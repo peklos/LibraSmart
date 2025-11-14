@@ -271,8 +271,8 @@ public class HistoryController : ControllerBase
         var loans = await _context.Loans
             .Include(l => l.Copy).ThenInclude(c => c.Book)
             .Include(l => l.Staff)
-            .Where(l => l.ReaderId == reader_id && l.ReturnDate != null)
-            .OrderByDescending(l => l.ReturnDate)
+            .Where(l => l.ReaderId == reader_id)
+            .OrderByDescending(l => l.LoanDate)
             .ToListAsync();
 
         return Ok(loans.Select(l => new
@@ -294,15 +294,29 @@ public class HistoryController : ControllerBase
     public async Task<IActionResult> GetReadingStats(int reader_id)
     {
         var loans = await _context.Loans
+            .Include(l => l.Copy).ThenInclude(c => c.Book).ThenInclude(b => b.Genre)
             .Where(l => l.ReaderId == reader_id)
             .ToListAsync();
+
+        var favoriteGenres = loans
+            .Where(l => l.Copy != null && l.Copy.Book != null && l.Copy.Book.Genre != null)
+            .GroupBy(l => l.Copy.Book.Genre.GenreName)
+            .Select(g => new
+            {
+                genre = g.Key,
+                count = g.Count()
+            })
+            .OrderByDescending(x => x.count)
+            .Take(5)
+            .ToList();
 
         return Ok(new
         {
             total_loans = loans.Count,
             active_loans = loans.Count(l => l.Status == "active"),
-            returned_loans = loans.Count(l => l.Status == "returned"),
-            overdue_loans = loans.Count(l => l.Status == "overdue")
+            overdue_loans = loans.Count(l => l.Status == "overdue"),
+            total_books_read = loans.Count(l => l.ReturnDate != null),
+            favorite_genres = favoriteGenres
         });
     }
 }
@@ -340,7 +354,8 @@ public class StatsController : ControllerBase
             .Select(g => new
             {
                 book_id = g.Key,
-                book_title = g.First().Copy.Book.Title,
+                title = g.First().Copy.Book.Title,
+                author = g.First().Copy.Book.Author,
                 loan_count = g.Count()
             })
             .OrderByDescending(x => x.loan_count)
@@ -378,7 +393,8 @@ public class StatsController : ControllerBase
             .Select(g => new
             {
                 reader_id = g.Key,
-                reader_name = g.First().Reader.FullName,
+                full_name = g.First().Reader.FullName,
+                email = g.First().Reader.Email,
                 loan_count = g.Count()
             })
             .OrderByDescending(x => x.loan_count)
