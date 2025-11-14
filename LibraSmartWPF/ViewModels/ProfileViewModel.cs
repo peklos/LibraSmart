@@ -180,7 +180,7 @@ public class ProfileViewModel : ViewModelBase
                 context.SaveChanges();
 
                 // Обновляем текущего пользователя
-                AuthenticationService.CurrentReader = reader;
+                AuthenticationService.UpdateCurrentReader(reader);
 
                 MessageBox.Show("Профиль успешно обновлён", "Успех",
                     MessageBoxButton.OK, MessageBoxImage.Information);
